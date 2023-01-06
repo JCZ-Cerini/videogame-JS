@@ -3,9 +3,6 @@
     margin: 0;
     padding: 0;
 }
-html {
-    font-size: 62.5%;
-}
 body {
     background-color: indigo;
     color: #fff;  
@@ -20,8 +17,8 @@ body {
     width: 100vw;
 }
 canvas {
-    border: .4rem solid #ff6600;
-    border-radius: .8rem;
+    border: 4px solid #ff6600;
+    border-radius: 8px;
     background-color: #feff9d;
 }
 .btns {
@@ -37,18 +34,18 @@ button {
     border-color: #ff6600;
     font-family: inherit;
     margin: 0;
-    padding: .5rem 2rem;
-    width: 10rem;
+    padding: 5px 20px;
+    width: 100px;
 }
 button:not(:last-child) {
-    margin-right: 1rem;
+    margin-right: 10px;
 }
 .messages {
     display: flex;
     flex-wrap: wrap;
     margin: 0 auto;
     width: 80%;
-    max-width: 46rem;
+    max-width: 460px;
 }
 p {
     display: block;
@@ -56,6 +53,6 @@ p {
     width: 100%;
 }
 @media (max-width: 440px) {
-    button { margin-top: 2.5rem; }
+    button { margin-top: 25px; }
     #up, #down { margin-left: 100%; margin-right: 100%; }
 }

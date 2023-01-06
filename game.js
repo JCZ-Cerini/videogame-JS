@@ -4,9 +4,12 @@ const btnUp = document.querySelector('#up');
 const btnLeft = document.querySelector('#left');
 const btnRight = document.querySelector('#right');
 const btnDown = document.querySelector('#down');
+const spanLives = document.querySelector('#lives');
 
 let canvasSize;
 let elementsSize;
+let level = 0;
+let lives = 3;
 
 const playerPosition = {
     x: undefined,
@@ -35,17 +38,24 @@ function setCanvasSize() {
 
     startGame()
 }
-
 function startGame() {
     console.log({ canvasSize, elementsSize });
 
     game.font = elementsSize + 'px Verdana';
     game.textAlign = 'end';
 
-    const map = maps[0];
+    const map = maps[level];
+
+    if (!map) {
+        gameWin();
+        return;
+    }
+
     const mapRows = map.trim().split('\n');
     const mapRowCols = mapRows.map(row => row.trim().split(''));
     console.log({map, mapRows, mapRowCols});
+
+    showLives();
 
     enemyPositions = [];
     game.clearRect(0, 0, canvasSize, canvasSize);
@@ -78,14 +88,13 @@ function startGame() {
 
     movePlayer();
 }
-
 function movePlayer() {
     const giftCollisionX = playerPosition.x.toFixed(3) == giftPosition.x.toFixed(3);
     const giftCollisionY = playerPosition.y.toFixed(3) == giftPosition.y.toFixed(3);
     const giftCollision = giftCollisionX && giftCollisionY;
     
     if (giftCollision) {
-        console.log('Subiste de nivel!');
+        levelWin();
     }
 
     const enemyCollision = enemyPositions.find(enemy => {
@@ -95,10 +104,38 @@ function movePlayer() {
     });
     
     if (enemyCollision) {
-        console.log('Chocaste contra un enemigo :(');
+        levelFail();
     }
 
     game.fillText(emojis['PLAYER'], playerPosition.x, playerPosition.y);
+}
+function levelWin() {
+    console.log('Subiste de nivel!');
+    level++
+    startGame();
+};
+function levelFail() {
+    console.log('Chocaste contra un enemigo :(');
+    lives--
+
+    if (lives <= 0) {
+        level = 0;
+        lives = 3;
+    }
+    playerPosition.x = undefined;
+    playerPosition.y = undefined;
+    startGame();
+    console.log(lives);
+}
+function gameWin() {
+    console.log('Terminaste el juego');
+}
+
+function showLives() {
+    const heartsArrays = Array(lives).fill(emojis['HEART']);
+    console.log(heartsArrays);
+    spanLives.innerHTML = '';
+    heartsArrays.forEach(heart => spanLives.append(heart));
 }
 
 window.addEventListener('keydown', moveByKeys);
@@ -113,7 +150,6 @@ function moveByKeys(event) {
     else if (event.key == 'ArrowRight') moveRight();
     else if (event.key == 'ArrowDown') moveDown();
 }
-
 function moveUp() {
     console.log('Me quiero mover hacia arriba');
     if ((playerPosition.y - elementsSize) < elementsSize) {
